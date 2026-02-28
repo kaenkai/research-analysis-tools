@@ -1,2 +1,3 @@
 # research-analysis-tools
-research-analysis-tools is a set of tools for scientific data analysis
+
+Set of tools for scientific data analysis
