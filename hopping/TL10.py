@@ -7,6 +7,7 @@ from lib import json_to_dataframe, KB, fitVRH, fitNNH
 import sys
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class TL10:
@@ -34,7 +35,7 @@ class TL10:
         :raise KeyError: if sample or parameter is not found
         """
         try:
-            return TL10.__df.loc[sample, par]
+            return TL10.__df.at[sample, par]
         except KeyError as err:
             raise KeyError(f'{err}: par={par}, sample={sample}')
 
@@ -86,6 +87,16 @@ class TL10:
             return meff, meff  # same value for paralllel and series connection
         return vR*TL10.__m_R+(1-vR)*TL10.__m_A, 1/(vR/TL10.__m_R+(1-vR)/TL10.__m_A)
 
+    @staticmethod
+    def read_conduction_data(sample=None) -> 'pd.dataframe':
+        # TODO: filenames from dictionary 
+        return pd.read_csv(f'datafiles/{sample}.csv', 
+            comment='#', index_col=0, header=None, names=['temperature', 'conductance'])
+
 if __name__ == "__main__":
-    print(TL10.get_df())
-    print(TL10.get_meff('TL10_10'))
+    # print(TL10.get_df())
+    df = TL10.read_conduction_data('TL10_10')
+    print(df.index.to_numpy())
+    # df.plot()
+    # plt.show()
+

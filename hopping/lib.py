@@ -26,7 +26,7 @@ plt.rcParams.update({
 })
 
 
-def dataframe_to_json(df: pd.DataFrame, file: str) -> None:
+def dataframe_to_json(df: 'pd.DataFrame', file: str) -> None:
     """Convert dataframe to JSON
     :param df: DataFrame
     :param file: File name to save JSON
@@ -61,7 +61,7 @@ def sciNotation(num: float) -> tuple[float, int]:
     return float(num_sci[0]), int(num_sci[1])
 
 
-def calcDerivative(data_x: np.ndarray[float], data_y: np.ndarray[float], k: int)\
+def calcDerivative(data_x: 'np.ndarray[float]', data_y: 'np.ndarray[float]', k: int)\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates derivative
     Ref: A. Möbius, Crit. Rev. Solid State Mater. Sci., 44, 1 (2019).
@@ -84,7 +84,7 @@ def calcDerivative(data_x: np.ndarray[float], data_y: np.ndarray[float], k: int)
     return np.array(arr_xa), np.array(der)
 
 
-def calcLogDerivative(data_x: np.ndarray[float], data_y: np.ndarray[float], k: int)\
+def calcLogDerivative(data_x: 'np.ndarray[float]', data_y: 'np.ndarray[float]', k: int)\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates logarithmic derivative using Möbius scheme
     Ref: A. Möbius, Crit. Rev. Solid State Mater. Sci., 44, 1 (2019).
@@ -98,7 +98,7 @@ def calcLogDerivative(data_x: np.ndarray[float], data_y: np.ndarray[float], k: i
     return x, y
 
 
-def calcLogDerivativeFD(x: np.ndarray[float], y: np.ndarray[float])\
+def calcLogDerivativeFD(x: 'np.ndarray[float]', y: 'np.ndarray[float]')\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates logarithmic derivative using finite difference differentiation algorithm
     :param x: X data
@@ -157,7 +157,7 @@ def effective_mass(x: float) -> float:
     return 20*x + 1*(1-x)
 
 
-def permittivity(x: float, cryst_conn: str='parallel') -> float:
+def permittivity(x: float, cryst_conn: str) -> float:
     """Calculates permittivity of anatase-rutile phases mix
     :param x: rutile phase weigth content (0:1)
     :param cryst_conn: crystallite connection type (parallel or series)
@@ -168,6 +168,8 @@ def permittivity(x: float, cryst_conn: str='parallel') -> float:
         return x*127 + (1-x)*45
     elif cryst_conn == 'series':
         return 1/(x/127 + (1-x)/45)
+    else:
+        raise ValueError('cryst_conn has to be either parallel or series')
 
 
 def bohr_radius(m: float, eps: float) -> float: 
