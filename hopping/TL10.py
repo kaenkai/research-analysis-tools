@@ -11,14 +11,12 @@ import matplotlib.pyplot as plt
 
 
 class TL10:
-
+    """Class for handling database of TL10 samples"""
     __df = json_to_dataframe("TL10.json")
     __df['marker'] = ['->', '-<', '-o', '-s', '-^', '-v', '-D', '-X']
-    __df['marker_no_line'] = ['>', '<', 'o', 's', '^', 'v', 'D', 'X']
     __df['color'] = ['C6', 'C7', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5']
     __df['label'] = ['1', '0.5', r'$6.6\times10^{-2}$', r'$7.4\times10^{-5}$',\
                     r'$8.2\times10^{-6}$', r'$7.3\times10^{-7}$', r'$3.3\times10^{-7}$', '0']
-    __df['defects'] = [None, None, 2, 2, 1.59, 1.26, 1.1, 1.0]
     __eps_R, __eps_A = 127, 45  # permittivity of rutile/anatase
     __m_R, __m_A = 20, 1  # effective mass of rutile/anatase
     __aB_R, __aB_A = 0.34, 2.38  # Bohr radius of rutile/anatase

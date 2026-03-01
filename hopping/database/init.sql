@@ -76,9 +76,6 @@ FROM samples s
 JOIN titanium_oxides r ON r.phase = 'rutile'
 JOIN titanium_oxides a ON a.phase = 'anatase'
 JOIN xrd_results xrd ON xrd.sample_id = s.sample_id;
--- Permittivity is calculated acording to:
---     parallel connection: eps = eps_rutile * rutile_fraction + eps_anatase * (1 - rutile_fraction)
---     series connection: 1 / eps =  rutile_fraction / eps_rutile + (1 - rutile_fraction) / eps_anatase
 
 -- Updates TL10_5 with values for TiO
 UPDATE structural_properties
@@ -93,6 +90,16 @@ SET epsilon_parallel = 5.0,
     epsilon_serial = 5.0,
     effective_mass = 6.0
 WHERE structural_properties.sample_id = 'TL10_7.5';
+
+-- Adds the degree of ionisation of oxygen vacancies
+ALTER TABLE structural_properties
+ADD ionisation REAL;
+UPDATE structural_properties SET ionisation = 2 WHERE sample_id = 'TL10_10';
+UPDATE structural_properties SET ionisation = 2 WHERE sample_id = 'TL10_15';
+UPDATE structural_properties SET ionisation = 1.59 WHERE sample_id = 'TL10_17.5';
+UPDATE structural_properties SET ionisation = 1.26 WHERE sample_id = 'TL10_20';
+UPDATE structural_properties SET ionisation = 1.1 WHERE sample_id = 'TL10_25';
+UPDATE structural_properties SET ionisation = 1 WHERE sample_id = 'TL10_30';
 
 -- =====
 -- view
