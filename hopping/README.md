@@ -17,7 +17,7 @@ T_{0,M} =
 \frac{\beta_M}{N_F(D)k_B\xi^D},
 $$
 
-where the numerical factor $\beta_M=18.1 $  for $D=3$, and in generality, it also depends on the system's dimensionality. In low temperatures often Efros-Schklovskii regime is considered which takes into account electron-electron interactions
+where the numerical factor $\beta_M=18.1$  for $D=3$, and in generality, it also depends on the system's dimensionality. In low temperatures often Efros-Schklovskii regime is considered which takes into account electron-electron interactions
 
 $$
 \sigma(T) =
