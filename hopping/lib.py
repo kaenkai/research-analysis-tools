@@ -17,14 +17,6 @@ import pandas as pd
 KB = cst.k/cst.eV  # Boltzmann constant [eV]
 E0 = cst.e  # electron charge [C]
 
-plt.rcParams.update({
-    "text.usetex": True,
-    "font.family": "serif",
-    "font.size": 12,
-    "text.latex.preamble": r"\usepackage[T1]{fontenc}",
-    "text.latex.preamble": r"\usepackage{xcolor}"
-})
-
 
 def dataframe_to_json(df: 'pd.DataFrame', file: str) -> None:
     """Convert dataframe to JSON
