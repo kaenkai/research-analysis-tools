@@ -3,7 +3,7 @@
 Class containing TL10 series data
 """
 
-from lib import json_to_dataframe, KB, fitVRH, fitNNH
+from src.lib import json_to_dataframe, KB, fitVRH, fitNNH
 import sys
 import numpy as np
 import pandas as pd
@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 class TL10:
     """Class for handling database of TL10 samples"""
-    __df = json_to_dataframe("database/TL10.json")
+    __df = json_to_dataframe("src/database/TL10.json")
 
     # Plot parameters
     __plot_params = {
@@ -122,7 +122,7 @@ class TL10:
         """Read conductivity data in [1/Ohm/cm]"""
         # TODO: filenames from dictionary
         th = TL10.get(par='thickness_nm', sample=sample)*1e-7
-        df = pd.read_csv(f'datafiles/{sample}.csv', 
+        df = pd.read_csv(f'src/datafiles/{sample}.csv', 
             comment='#', index_col=0, header=None, names=['temperature', 'conductivity'])/th
         return pd.Series(df['conductivity'], index=df.index)
 
