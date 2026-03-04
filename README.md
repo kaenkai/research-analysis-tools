@@ -13,7 +13,6 @@ research-analysis-tools/
 │  │  ├─ database/
 │  │  ├─ datafiles/
 │  │  ├─ lib.py
-│  │  ├─ TL10.py
 │  ├─ output/
 │  │  ├─ Plots in pdf or png format
 │  ├─ Jupyter notebooks for analysis
