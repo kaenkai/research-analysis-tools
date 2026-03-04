@@ -59,3 +59,23 @@ SELECT
     COUNT(*) as n_samples
 FROM samples
 GROUP BY pressure_range;
+
+.print ''
+.print '>> correlation between x and crystallite size'
+WITH 
+avg_params AS (
+    SELECT 
+        AVG(stoichiometry_x) AS avg_x, 
+        AVG(crystallite_size) AS avg_xrd
+    FROM analysis_dataset
+),
+frac AS (
+    SELECT
+        SUM((stoichiometry_x - a.avg_x) * 
+            (crystallite_size - a.avg_xrd)) AS up,
+        (SQRT(SUM((stoichiometry_x - a.avg_x)*(stoichiometry_x - a.avg_x))) * 
+            SQRT(SUM((crystallite_size - a.avg_xrd)*(crystallite_size - a.avg_xrd)))) AS down
+    FROM analysis_dataset, avg_params a
+)
+SELECT ROUND(up/down, 2) AS correlation FROM frac;
+.print '>> commentary: crystallite size goes up for smaller parameter x'
