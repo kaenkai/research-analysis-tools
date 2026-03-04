@@ -77,19 +77,9 @@ JOIN titanium_oxides r ON r.phase = 'rutile'
 JOIN titanium_oxides a ON a.phase = 'anatase'
 JOIN xrd_results xrd ON xrd.sample_id = s.sample_id;
 
--- Updates TL10_5 with values for TiO
-UPDATE structural_properties
-SET epsilon_parallel = 1.0,
-    epsilon_serial = 1.0,
-    effective_mass = 7.0
-WHERE structural_properties.sample_id = 'TL10_5';
-
--- Updates TL10_7.5 with values for Ti2O3
-UPDATE structural_properties
-SET epsilon_parallel = 5.0,
-    epsilon_serial = 5.0,
-    effective_mass = 6.0
-WHERE structural_properties.sample_id = 'TL10_7.5';
+-- Updates TL10_5 with values for TiO and TL10_7.5 with values for Ti2O3
+INSERT INTO structural_properties (sample_id, epsilon_parallel, epsilon_serial, effective_mass)
+VALUES ('TL10_5', 1.0, 1.0, 7.0), ('TL10_7.5', 5.0, 5.0, 6.0);
 
 -- Adds the degree of ionisation of oxygen vacancies
 ALTER TABLE structural_properties
@@ -108,4 +98,5 @@ UPDATE structural_properties SET ionisation = 1 WHERE sample_id = 'TL10_30';
 CREATE VIEW analysis_dataset AS
 SELECT samples.sample_id, thickness_nm, oxygen_pressure, stoichiometry_x, rutile_fraction, epsilon_serial, epsilon_parallel, effective_mass, crystallite_size
 FROM samples
-JOIN structural_properties USING(sample_id);
+JOIN structural_properties USING(sample_id)
+ORDER BY oxygen_pressure;
