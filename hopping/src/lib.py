@@ -6,13 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.constants as cst
 import json
-# import sys
 import pandas as pd
-# from matplotlib import ticker
-# from matplotlib.colors import LogNorm
-# from scipy.optimize import curve_fit
-# import matplotlib as mpl
-# import json
 
 KB = cst.k/cst.eV  # Boltzmann constant [eV]
 E0 = cst.e  # electron charge [C]
@@ -29,21 +23,15 @@ def dataframe_to_json(df: 'pd.DataFrame', file: str) -> None:
         f.write(json_string)
 
 
-def json_to_dict(file: str) -> dict:
-    """Convert JSON to dictionary"""
-    with open(file, 'r') as f:
-        json_string = f.read()
-    data_dict = json.loads(json_string)
-    return data_dict
-
-
-def json_to_dataframe(file: str) -> pd.DataFrame:
+def json_to_dataframe(file: str) -> 'pd.DataFrame':
     """Convert JSON to dataframe
     :param file: File name with JSON data
     """
-    data_dict = json_to_dict(file)
-    data_df = pd.DataFrame.from_dict(data_dict, orient='index')
+    with open(file, 'r') as f:
+        json_string = f.read()
+    data_df = pd.DataFrame.from_dict(json.loads(json_string), orient='index')
     return data_df
+
 
 def sciNotation(num: float) -> tuple[float, int]:
     """Formats number to SCI notation m*10^n
