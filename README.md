@@ -13,7 +13,6 @@ research-analysis-tools/
 │  │  ├─ database/
 │  │  ├─ datafiles/
 │  │  ├─ lib.py
-│  │  ├─ TL10.py
 │  ├─ output/
 │  │  ├─ Plots in pdf or png format
 │  ├─ Jupyter notebooks for analysis
@@ -28,6 +27,5 @@ Analysis is done through jupyter notebooks.
 
 ### TODO
 
-* implement SQLite database located in `src/database/`, now database in form of JSON is used,
 * add more jupyter notebooks to *hopping* project,
 * add tools for *contactless electroreflectance (CER) spectrometry* and *UV-Vis spectrophotometry* data analysis.
