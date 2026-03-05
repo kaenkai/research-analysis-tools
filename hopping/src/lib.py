@@ -13,7 +13,7 @@ KB = cst.k/cst.eV  # Boltzmann constant [eV]
 E0 = cst.e  # electron charge [C]
 
 
-def dataframe_to_json(df: 'pd.DataFrame', file: str) -> None:
+def dataframe_to_json(df: 'pandas.DataFrame', file: str) -> None:
     """Convert dataframe to JSON
     :param df: DataFrame
     :param file: File name to save JSON
@@ -24,7 +24,7 @@ def dataframe_to_json(df: 'pd.DataFrame', file: str) -> None:
         f.write(json_string)
 
 
-def json_to_dataframe(file: str) -> 'pd.DataFrame':
+def json_to_dataframe(file: str) -> 'pandas.DataFrame':
     """Convert JSON to dataframe
     :param file: File name with JSON data
     """
@@ -34,7 +34,7 @@ def json_to_dataframe(file: str) -> 'pd.DataFrame':
     return data_df
 
 
-def sciNotation(num: float) -> tuple[float, int]:
+def sciNotation(num: float) -> 'tuple[float, int]':
     """Formats number to SCI notation m*10^n
     :return: number in SCI notation as tuple
     """
@@ -42,7 +42,7 @@ def sciNotation(num: float) -> tuple[float, int]:
     return float(num_sci[0]), int(num_sci[1])
 
 
-def calcDerivative(data_x: 'np.ndarray[float]', data_y: 'numpy.ndarray[float]', k: int)\
+def calcDerivative(data_x: 'numpy.ndarray[float]', data_y: 'numpy.ndarray[float]', k: int)\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates derivative
     Ref: A. Möbius, Crit. Rev. Solid State Mater. Sci., 44, 1 (2019).
@@ -65,7 +65,7 @@ def calcDerivative(data_x: 'np.ndarray[float]', data_y: 'numpy.ndarray[float]', 
     return np.array(arr_xa), np.array(der)
 
 
-def calcLogDerivative(data_x: 'np.ndarray[float]', data_y: 'numpy.ndarray[float]', k: int)\
+def calcLogDerivative(data_x: 'numpy.ndarray[float]', data_y: 'numpy.ndarray[float]', k: int)\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates logarithmic derivative using Möbius scheme
     Ref: A. Möbius, Crit. Rev. Solid State Mater. Sci., 44, 1 (2019).
@@ -79,7 +79,7 @@ def calcLogDerivative(data_x: 'np.ndarray[float]', data_y: 'numpy.ndarray[float]
     return x, y
 
 
-def calcLogDerivativeFD(x: 'np.ndarray[float]', y: 'numpy.ndarray[float]')\
+def calcLogDerivativeFD(x: 'numpy.ndarray[float]', y: 'numpy.ndarray[float]')\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates logarithmic derivative using finite difference differentiation algorithm
     :param x: X data
@@ -148,7 +148,7 @@ def fermi_level_dos(xi: float, tM: float) -> float:
 
 
 def calc_xi(tES: float, eps:float) -> float:
-    """Calculates localization lenght
+    """Calculates localization length
     :param eps: permittivity
     :param tES: characteristic ES temperature [K]
     "return localization lenght [m]
@@ -156,13 +156,8 @@ def calc_xi(tES: float, eps:float) -> float:
     return 2.8*cst.e**2/(epsilon*cst.epsilon_0*tES*KB*cst.eV)
 
 
-def fitVRH(x_data, y_data, v=0.25) -> 'numpy.array[float]':
-    """Fit VRH
-    :param x_data conductivity:
-    :param y_data temperature:
-    :param v: VRH conduction model (1/4, 1/3, 1/2 or 1)
-    :return: sig0 [Ohm^-1m^-1], t0 [K], sig0_err, t0_err
-    """
+def fitVRH(x_data: float, y_data: float, v: float) -> 'numpy.array[float]':
+    """Fit Variable-Range Hopping"""
     x = x_data ** (-v)
     y = np.log(y_data * x_data ** (2. * v))
     fit, cov = np.polyfit(x, y, 1, cov=True)  # linear fit
@@ -173,13 +168,7 @@ def fitVRH(x_data, y_data, v=0.25) -> 'numpy.array[float]':
 
 
 def fitNNH(x_data, y_data) -> 'numpy.array[float]':
-    """Fit NNH
-    :param sample: sample id
-    :param t_min: min of temperature range
-    :param t_max: max of temperature range
-    :param cov: calculate covariance matrix?
-    :return: sigma_0, E_A, sigma_0 error, E_A error
-    """
+    """Fit Nearest-Neighbour Hopping model"""
     x = 1 / x_data / KB
     y = np.log(y_data / th)
     fit, cov = np.polyfit(x, y, 1, cov=True)
