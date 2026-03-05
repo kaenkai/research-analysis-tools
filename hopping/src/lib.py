@@ -42,7 +42,7 @@ def sciNotation(num: float) -> tuple[float, int]:
     return float(num_sci[0]), int(num_sci[1])
 
 
-def calcDerivative(data_x: 'np.ndarray[float]', data_y: 'np.ndarray[float]', k: int)\
+def calcDerivative(data_x: 'np.ndarray[float]', data_y: 'numpy.ndarray[float]', k: int)\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates derivative
     Ref: A. Möbius, Crit. Rev. Solid State Mater. Sci., 44, 1 (2019).
@@ -65,7 +65,7 @@ def calcDerivative(data_x: 'np.ndarray[float]', data_y: 'np.ndarray[float]', k: 
     return np.array(arr_xa), np.array(der)
 
 
-def calcLogDerivative(data_x: 'np.ndarray[float]', data_y: 'np.ndarray[float]', k: int)\
+def calcLogDerivative(data_x: 'np.ndarray[float]', data_y: 'numpy.ndarray[float]', k: int)\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates logarithmic derivative using Möbius scheme
     Ref: A. Möbius, Crit. Rev. Solid State Mater. Sci., 44, 1 (2019).
@@ -79,7 +79,7 @@ def calcLogDerivative(data_x: 'np.ndarray[float]', data_y: 'np.ndarray[float]', 
     return x, y
 
 
-def calcLogDerivativeFD(x: 'np.ndarray[float]', y: 'np.ndarray[float]')\
+def calcLogDerivativeFD(x: 'np.ndarray[float]', y: 'numpy.ndarray[float]')\
         -> tuple[np.ndarray[float], np.ndarray[float]]:
     """Calculates logarithmic derivative using finite difference differentiation algorithm
     :param x: X data
@@ -156,7 +156,7 @@ def calc_xi(tES: float, eps:float) -> float:
     return 2.8*cst.e**2/(epsilon*cst.epsilon_0*tES*KB*cst.eV)
 
 
-def fitVRH(x_data, y_data, v=0.25) -> 'np.array[float]':
+def fitVRH(x_data, y_data, v=0.25) -> 'numpy.array[float]':
     """Fit VRH
     :param x_data conductivity:
     :param y_data temperature:
@@ -172,7 +172,7 @@ def fitVRH(x_data, y_data, v=0.25) -> 'np.array[float]':
     return sig0, t0, sig0_err, t0_err
 
 
-def fitNNH(x_data, y_data) -> 'np.array[float]':
+def fitNNH(x_data, y_data) -> 'numpy.array[float]':
     """Fit NNH
     :param sample: sample id
     :param t_min: min of temperature range
@@ -186,7 +186,7 @@ def fitNNH(x_data, y_data) -> 'np.array[float]':
     return np.exp(fit[1]), -fit[0], np.exp(fit[1])*np.sqrt(cov[1, 1]), np.sqrt(cov[0, 0])
 
 
-class TL10:
+class ThinFilmDatabase:
     """Class for handling database of TL10 samples"""
     __df = pd.read_sql(
         'SELECT * FROM analysis_dataset',
@@ -205,106 +205,42 @@ class TL10:
         'TL10_30': {'m': '-X', 'c': 'C5', 'label': '0'}
     }
 
-    # Rutile/anatase properties
-    __eps_R, __eps_A = 127, 45  # permittivity of rutile/anatase
-    __m_R, __m_A = 20, 1  # effective mass of rutile/anatase
-    __aB_R, __aB_A = 0.34, 2.38  # Bohr radius of rutile/anatase
-
     # Temperature ranges
-    __high_temp_ranges = {
+    __ht_range = {
         'TL10_5': [180, 210], 'TL10_7.5': [210, 270],
         'TL10_10': [220, 270], 'TL10_15': [210, 270],
         'TL10_17.5': [170, 270], 'TL10_20': [220, 280],
         'TL10_25': [230, 290], 'TL10_30': [220, 280],
     }
-    __low_temp_ranges = {
+    __lt_range = {
         'TL10_5': [30, 42], 'TL10_7.5': [30, 40],
         'TL10_10': [30, 40], 'TL10_15': [44, 60],
         'TL10_17.5': [100, 120], 'TL10_20': [130, 140],
         'TL10_25': [150, 170], 'TL10_30': [170,180],
     }
 
-    @staticmethod
-    def plot_params(sample):
-        return TL10.__plot_params[sample]
+    @classmethod
+    def load_df(cls) -> 'pandas.DataFrame':
+        """Get dataframe"""
+        return cls.__df
 
-    @staticmethod
-    def ht_range(sample):
-        return TL10.__high_temp_ranges[sample]
+    @classmethod
+    def plt_params(cls, sample) -> dict:
+        return cls.__plot_params[sample]
 
-    @staticmethod
-    def lt_range(sample):
-        return TL10.__low_temp_ranges[sample]
+    @classmethod
+    def ht_range(cls, sample) -> dict:
+        return cls.__ht_range[sample]
 
-    @staticmethod
-    def get_df():
-        """Get full dataframe."""
-        return TL10.__df
+    @classmethod
+    def lt_range(cls, sample) -> dict:
+        return cls.__lt_range[sample]
 
-    @staticmethod
-    def get(par, sample):
-        """Get parameter value for a single sample.
-        :return: dataframe cell for a given parameter and sample
-        :raise KeyError: if sample or parameter is not found
-        """
-        try:
-            return TL10.__df.at[sample, par]
-        except KeyError as err:
-            raise KeyError(f'{err}: par={par}, sample={sample}')
-
-    @staticmethod
-    def get_range(par=None, start=None, stop=None):
-        """Get parameter values for a range of samples.
-        :param par: parameter name
-        :param start: start index of sample range
-        :param stop: stop index of sample range
-        :return: parameter values for a given parameter and sample range
-        :raise KeyError: if parameter is not found
-        """
-        try:
-            return np.array(TL10.__df[par][start:stop])
-        except KeyError as err:
-            raise KeyError(f'{err}, wrong parameter name (got {par})')
-
-    @staticmethod
-    def get_parameters():
-        """Get list of available parameters."""
-        return list(TL10.__df.columns)
-
-    @staticmethod
-    def get_samples(start, stop):
-        """Get list of samples."""
-        return list(TL10.__df[start:stop].index)
-
-    @staticmethod
-    def get_eps(sample):
-        """Get permittivity.
-        :param sample: sample id
-        :return: permittivity (parallel, series)
-        """
-        vR = TL10.get(par='vR', sample=sample)
-        if np.isnan(vR):
-            eps = {'TL10_5': 1, 'TL10_7.5': 5}[sample]
-            return eps, eps  # same value for paralllel and series connection
-        return vR*TL10.__eps_R+(1-vR)*TL10.__eps_A, 1/(vR/TL10.__eps_R+(1-vR)/TL10.__eps_A)
-
-    @staticmethod
-    def get_meff(sample):
-        """Get effective mass.
-        :param sample: sample id
-        :return: effective mass (parallel, series)
-        """
-        vR = TL10.get(par='vR', sample=sample)
-        if np.isnan(vR):
-            meff = {'TL10_5': 7, 'TL10_7.5': 6}[sample]
-            return meff, meff  # same value for paralllel and series connection
-        return vR*TL10.__m_R+(1-vR)*TL10.__m_A, 1/(vR/TL10.__m_R+(1-vR)/TL10.__m_A)
-
-    @staticmethod
-    def read_conductivity(sample):
+    @classmethod
+    def read_conductivity(cls, sample) -> 'pandas.Series':
         """Read conductivity data in [1/Ohm/cm]"""
         # TODO: filenames from dictionary
-        th = TL10.get(par='thickness_nm', sample=sample)*1e-7
+        th = cls.__df.at[sample, 'thickness_nm']*1e-7
         df = pd.read_csv(f'src/datafiles/{sample}.csv', 
             comment='#', index_col=0, header=None, names=['temperature', 'conductivity'])/th
         return pd.Series(df['conductivity'], index=df.index)
