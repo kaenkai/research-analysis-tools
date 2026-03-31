@@ -16,12 +16,14 @@ research-analysis-tools/
 │  ├─ output/
 │  │  ├─ Plots in pdf or png format
 │  ├─ Jupyter notebooks for analysis
+├─ playground/
 ```
 
-* `database/` folder contains databases in form of SQLite and JSON,
-* `datafiles/` conductance measurements in form of CSV files,
-* `lib.py` library with useful functions,
-* `TL10.py` module for managing database through **pandas** library.
+* `hopping`: a project for electron transport analisys
+  * `database/` databases in form of SQLite and JSON (depreciated),
+  * `datafiles/` conductance measurements in form of CSV files,
+  * `lib.py` library with many useful functions for analysis and `TL10` class for managing database through **pandas** library.
+* `playground`: a project mainly used as a sandbox for learning EDA and ML.
 
 Analysis is done through jupyter notebooks.
 
